@@ -9,5 +9,12 @@ logging:
   level:
     org:
       springframework:
-        jdbc: DEBUG
-
+        web: debug
+        jdbc: debug
+    root: info
+  file:
+    path: './log'
+    name: ${logging.file.path}/podologia.log
+  logback:
+    rollingpolicy:
+      total-size-cap: 200MB

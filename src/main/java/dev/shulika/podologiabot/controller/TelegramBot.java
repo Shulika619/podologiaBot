@@ -34,9 +34,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void startCommandReceived(long chatId, String name) {
-        String answer = "Привет, " + name + ", nice to meet you!";
-        log.info("IN TelegramBot :: startCommandReceived ::Replied to user " + name);
-        prepareAndSendMessage(chatId, answer);
+        String response = "Привет, " + name;
+        log.info("IN TelegramBot :: startCommandReceived ::Replied to user: {}, message: {}", name, response);
+        prepareAndSendMessage(chatId, response);
     }
 
     private void prepareAndSendMessage(long chatId, String textToSend) {
@@ -46,6 +46,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
+            log.error("Error :: execute message :: ", e.getMessage());
             throw new RuntimeException(e);
         }
     }

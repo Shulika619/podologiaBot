@@ -1,6 +1,19 @@
 server:
   port: 8088
 
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/podologia_tg
+    username: postgres
+    password: 1234
+    initialize: true
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
 bot:
   name: PodologiaLnrBot
   token: 6211665075:AAGKnnZFnxJvTCcw_4Blk2XiuZXVMiW075k

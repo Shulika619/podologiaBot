@@ -13,7 +13,7 @@ logging:
         jdbc: debug
     root: info
   file:
-    path: './log'
+    path: './var/log'
     name: ${logging.file.path}/podologia.log
   logback:
     rollingpolicy:

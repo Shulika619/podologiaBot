@@ -2,11 +2,14 @@ package dev.shulika.podologiabot.controller;
 
 import dev.shulika.podologiabot.BotConst;
 import dev.shulika.podologiabot.config.BotConfig;
+import dev.shulika.podologiabot.model.User;
+import dev.shulika.podologiabot.repository.UserRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -15,6 +18,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Data
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
+    private final UserRepository userRepository;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -24,7 +28,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             switch (messageText) {
-                case "/start" -> startCommandReceived(chatId, originalMessage.getChat().getFirstName());
+                case "/start" -> startCommand(chatId, originalMessage);
                 case "/contact" -> sendMessage(chatId, BotConst.CONTACT_TEXT);
                 case "/help" -> sendMessage(chatId, BotConst.HELP_TEXT);
                 default -> sendMessage(chatId, BotConst.NO_COMMAND_TEXT);
@@ -32,10 +36,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void startCommandReceived(long chatId, String name) {
-        String response = BotConst.HELLO_TEXT + name;
-        log.info("IN TelegramBot :: startCommandReceived :: Replied to user: {}", name);
+    private void startCommand(long chatId, Message message) {
+        String firstName = message.getChat().getFirstName();
+        String response = BotConst.HELLO_TEXT + firstName + " \uD83E\uDD17";
+        log.info("IN TelegramBot :: startCommand:: Replied hello to user: {}", firstName);
         sendMessage(chatId, response);
+
+        if(userRepository.findById(chatId).isEmpty()){
+            User user = User.builder()
+                    .id(chatId)
+                    .firstName(firstName)
+                    .lastName(message.getChat().getLastName())
+                    .userName(message.getChat().getUserName())
+                    .build();
+            userRepository.save(user);
+            log.info("IN TelegramBot :: startCommand:: New user: {} :: Saved", firstName);
+        }
     }
 
     private void sendMessage(long chatId, String textToSend) {
@@ -46,7 +62,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             log.error("Error :: execute message :: ", e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 

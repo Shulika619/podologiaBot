@@ -1,5 +1,8 @@
 package dev.shulika.podologiabot.controller;
 
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
+import com.vdurmont.emoji.EmojiParser;
 import dev.shulika.podologiabot.BotConst;
 import dev.shulika.podologiabot.config.BotConfig;
 import dev.shulika.podologiabot.model.User;
@@ -38,7 +41,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startCommand(long chatId, Message message) {
         String firstName = message.getChat().getFirstName();
-        String response = BotConst.HELLO_TEXT + firstName + " \uD83E\uDD17";
+        String response = BotConst.HELLO_TEXT + firstName + EmojiParser.parseToUnicode(" :wave:");
         log.info("IN TelegramBot :: startCommand:: Replied hello to user: {}", firstName);
         sendMessage(chatId, response);
 

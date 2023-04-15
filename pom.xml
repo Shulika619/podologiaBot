@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <telegram.version>6.5.0</telegram.version>
         <lombok.version>1.18.24</lombok.version>
+        <emoji.version>5.1.1</emoji.version>
     </properties>
     <dependencies>
 
@@ -65,6 +66,14 @@
             <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.vdurmont/emoji-java -->
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>${emoji.version}</version>
+        </dependency>
+
 
     </dependencies>
 

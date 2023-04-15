@@ -14,5 +14,6 @@ public class Post {
     @Column(name = "id")
     private Long id;
 
+    @Column(length = 550)
     private String message;
 }

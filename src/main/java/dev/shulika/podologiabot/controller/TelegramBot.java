@@ -60,8 +60,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void startCommand(long chatId, Message message) {
         String firstName = message.getChat().getFirstName();
         String response = BotConst.HELLO_TEXT + firstName + EmojiParser.parseToUnicode(" :wave:");
-        log.info("IN TelegramBot :: startCommand:: Replied hello to user: {}", firstName);
         sendMessage(chatId, response);
+        log.info("IN TelegramBot :: startCommand:: Replied hello to user: {}", firstName);
 
         if (userRepository.findById(chatId).isEmpty()) {
             User user = User.builder()

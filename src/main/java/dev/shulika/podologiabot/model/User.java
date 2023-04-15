@@ -23,4 +23,10 @@ public class User {
     private String userName;
     @CreationTimestamp
     private Timestamp registeredAt;
+
+    @Builder.Default
+    private String role = "USER";
+
+    @Builder.Default
+    private String status = "ACTIVE";
 }

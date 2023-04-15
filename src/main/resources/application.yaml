@@ -17,6 +17,7 @@ spring:
 bot:
   name: PodologiaLnrBot
   token: 6211665075:AAGKnnZFnxJvTCcw_4Blk2XiuZXVMiW075k
+  owner: 5580936952
 
 logging:
   level:

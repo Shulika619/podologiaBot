@@ -1,5 +1,4 @@
 HELP.md
-var/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -34,3 +33,4 @@ build/
 .vscode/
 /podologiaBot.log
 /logs/
+var/log/podologia.log

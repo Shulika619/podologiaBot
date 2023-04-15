@@ -3,10 +3,13 @@ package dev.shulika.podologiabot.controller;
 import com.vdurmont.emoji.EmojiParser;
 import dev.shulika.podologiabot.BotConst;
 import dev.shulika.podologiabot.config.BotConfig;
+import dev.shulika.podologiabot.model.Post;
 import dev.shulika.podologiabot.model.User;
+import dev.shulika.podologiabot.repository.PostRepository;
 import dev.shulika.podologiabot.repository.UserRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,6 +29,7 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -105,19 +109,36 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.findById(chatId).get().getRole().equals("ADMIN")
         ) {
             log.info("IN TelegramBot :: sendCommand:: ChatId: {} :: Start", chatId);
-            sendMessage(chatId, BotConst.SEND_TEXT);
 
             // TODO: send getting msg to ALL
+//            sendMessage(chatId, BotConst.SEND_TEXT);
+//            var textToSend = EmojiParser.parseToUnicode(
+//                    message.getText().substring(message.getText().indexOf(" ")));   // if /send Some text
+
 //            var textToSend = EmojiParser.parseToUnicode(":heart: Тестовая рассылка, извините за беспокойство! :pray:");
 //            var users = userRepository.findAll();
 //            for (User user : users) {
 //                sendMessage(user.getId(), textToSend);
 //            }
+            log.info("IN TelegramBot :: sendCommand :: Finished", chatId);
         } else {
             sendMessage(chatId, BotConst.NO_COMMAND_TEXT);
             log.warn("IN TelegramBot :: sendCommand:: ChatId: {} :: TRY SEND BUT DOES NOT HAVE Access Rights!!!", chatId);
         }
     }
+
+    // AUTO SEND ALL Posts from DB, can add to application.yaml cron.scheduler=0 * * * * *
+//    @Scheduled(cron = "0 * * * * *")
+//    private void sendPostFromDB(){
+//        var posts = postRepository.findAll();
+//        var users = userRepository.findAll();
+//        for (Post post: posts){
+//            for (User user: users){
+////                sendMessage(user.getId(), post.getMessage());
+//                log.info("ChatId: {}, sendMessage: {}", user.getId(),post.getMessage());
+//            }
+//        }
+//    }
 
     private void sendMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
